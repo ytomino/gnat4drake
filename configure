@@ -1,0 +1,92 @@
+#!/bin/sh
+
+# parsing options
+
+RTSDIR=
+USAGE=
+
+while [[ $1 != "" ]] ; do
+	case $1 in
+		'--RTS' )
+			shift
+			RTSDIR=$1
+			shift ;;
+		--RTS=* )
+			RTSDIR=${1#--RTS=}
+			shift ;;
+		*)
+			USAGE=1
+			shift ;;
+	esac
+done
+
+if [[ -n $USAGE ]] ; then
+	echo "usage: ./configure --RTS (the directory that drake is installed)" >&2
+	exit
+fi
+
+# variables
+
+G_GPR=gnat.gpr
+C_GPR=c.gpr # tell the translated headers to gprbuild
+
+HOST=$(gcc -dumpmachine)
+TARGET=$HOST
+
+BUILDDIR=$TARGET.build
+
+# reading the compiler option used in the runtime library
+
+if [[ $RTSDIR == "" ]] ; then
+	LIBGCC=$(gcc -print-libgcc-file-name)
+	LIBGCCDIR=${LIBGCC%/libgcc.a}
+	RTSDIR=$LIBGCCDIR
+fi
+
+CFLAGS=
+QCFLAGS=
+
+for FLAG in $(grep "^A " $RTSDIR/adalib/ada.ali) ; do
+	if [[ $FLAG != A && $FLAG != -nostdinc ]] ; then
+		CFLAGS="$CFLAGS $FLAG"
+		if [[ -n $QCFLAGS ]] ; then
+			QCFLAGS="$QCFLAGS, "
+		fi
+		QCFLAGS="$QCFLAGS\"$FLAG\""
+	fi
+done
+
+# listing the translated headers
+
+C_SOURCE_FILES=c.ads
+QC_SOURCE_FILES="\"c.ads\""
+
+cd $RTSDIR/adainclude
+for I in c-*.ad[sb] ; do
+	C_SOURCE_FILES="$C_SOURCE_FILES $I"
+	QC_SOURCE_FILES="$QC_SOURCE_FILES, \"$I\""
+done
+cd - > /dev/null
+
+# generating
+
+echo "with \"c\";" > $G_GPR
+echo "project gnat is" >> $G_GPR
+echo "   for Source_Dirs use (\".\");" >> $G_GPR
+echo "   for Object_Dir  use \"$BUILDDIR\";" >> $G_GPR
+echo "   package compiler is" >> $G_GPR
+echo "      for Switches (\"Ada\") use ($QCFLAGS);" >> $G_GPR
+echo "   end compiler;" >> $G_GPR
+echo "end gnat;" >> $G_GPR
+
+echo "$G_GPR is generated." >&2
+
+echo "library project C is" > $C_GPR
+echo "   for Library_Name use \"c\";" >> $C_GPR
+echo "   for Library_Dir use \"$RTSDIR/adalib\";" >> $C_GPR
+echo "   for Source_Dirs use (\"$RTSDIR/adainclude\");" >> $C_GPR
+echo "   for Source_Files use ($QC_SOURCE_FILES);" >> $C_GPR
+echo "   for Externally_Built use \"true\";" >> $C_GPR
+echo "end C;" >> $C_GPR
+
+echo "$C_GPR is generated." >&2
