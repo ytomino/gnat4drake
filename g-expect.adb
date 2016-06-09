@@ -1,5 +1,5 @@
+with Ada.Characters.Latin_1;
 with Ada.Command_Line;
-with Ada.Processes;
 with Ada.Streams.Stream_IO.Pipes;
 with Ada.Strings.Unbounded_Strings;
 package body GNAT.Expect is
@@ -69,5 +69,66 @@ package body GNAT.Expect is
          Status => Ada.Command_Line.Exit_Status (Status.all));
       return Ada.Strings.Unbounded_Strings.To_String (Result);
    end Get_Command_Output;
+
+   procedure Close (Descriptor : in out Process_Descriptor) is
+   begin
+      Ada.Processes.Wait (Descriptor.Item);
+   end Close;
+
+   procedure Close (
+      Descriptor : in out Process_Descriptor;
+      Status : out Integer) is
+   begin
+      Ada.Processes.Wait (
+         Descriptor.Item,
+         Ada.Command_Line.Exit_Status (Status));
+   end Close;
+
+   procedure Send (
+      Descriptor : in out Process_Descriptor;
+      Str : String;
+      Add_LF : Boolean := True;
+      Empty_Buffer : Boolean := False)
+   is
+      pragma Unreferenced (Empty_Buffer);
+      LF : constant String (1 .. 1) := (1 => Ada.Characters.Latin_1.LF);
+   begin
+      String'Write (
+         Ada.Streams.Stream_IO.Stream (Descriptor.Input_Writing.all),
+         Str & LF (1 .. Boolean'Pos (Add_LF)));
+   end Send;
+
+   procedure Expect (
+      Descriptor : in out Process_Descriptor;
+      Result : out Expect_Match;
+      Regexp : String;
+      Timeout : Integer := 10_000;
+      Full_Buffer : Boolean := False) is
+   begin
+      raise Program_Error; -- unimplemented
+   end Expect;
+
+   procedure Expect (
+      Descriptor : in out Process_Descriptor;
+      Result : out Expect_Match;
+      Regexp : GNAT.Regpat.Pattern_Matcher;
+      Timeout : Integer := 10_000;
+      Full_Buffer : Boolean := False) is
+   begin
+      raise Program_Error; -- unimplemented
+   end Expect;
+
+   procedure Flush (
+      Descriptor : in out Process_Descriptor;
+      Timeout : Integer := 0) is
+   begin
+      raise Program_Error; -- unimplemented
+   end Flush;
+
+   function Expect_Out (Descriptor : Process_Descriptor) return String is
+   begin
+      raise Program_Error; -- unimplemented
+      return Expect_Out (Descriptor);
+   end Expect_Out;
 
 end GNAT.Expect;
