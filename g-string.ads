@@ -11,4 +11,6 @@ package GNAT.Strings is
 
    type String_List_Access is access all String_List;
 
+   procedure Free (Arg : in out String_List_Access);
+
 end GNAT.Strings;
