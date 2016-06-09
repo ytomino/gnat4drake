@@ -5,7 +5,22 @@ package GNAT.Regpat is
 
    Expression_Error : exception;
 
-   type Regexp_Flags is (No_Flags);
+   type Regexp_Bit is (
+      Case_Insensitive_Bit,
+      Single_Line_Bit,
+      Multiple_Lines_Bit);
+      --  representation
+
+   type Regexp_Flags is array (Regexp_Bit) of Boolean;
+   pragma Pack (Regexp_Flags);
+
+   No_Flags : constant Regexp_Flags := (others => False);
+   Case_Insensitive : constant Regexp_Flags :=
+      (Case_Insensitive_Bit => True, others => False);
+   Single_Line : constant Regexp_Flags :=
+      (Single_Line_Bit => True, others => False);
+   Multiple_Lines : constant Regexp_Flags :=
+      (Multiple_Lines_Bit => True, others => False);
 
    --  Match_Array
 
@@ -17,6 +32,8 @@ package GNAT.Regpat is
    end record;
 
    type Match_Array is array (Match_Count range <>) of Match_Location;
+
+   No_Match : constant Match_Location := (First => 0, Last => 0);
 
    --  Pattern_Matcher Compilation
 
