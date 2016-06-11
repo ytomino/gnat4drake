@@ -28,6 +28,8 @@ package GNAT.Command_Line is
    function Parameter (Parser : Opt_Parser := Command_Line_Parser)
       return String;
 
+   Invalid_Switch : exception;
+
    Invalid_Parameter : exception;
 
 end GNAT.Command_Line;
