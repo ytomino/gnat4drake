@@ -1,0 +1,130 @@
+diff --git a/source/required/s-soflin.ads b/source/required/s-soflin.ads
+index a883ce68..fa313e84 100644
+--- a/source/required/s-soflin.ads
++++ b/source/required/s-soflin.ads
+@@ -68,4 +68,36 @@ package System.Soft_Links is
+    end record;
+    pragma Suppress_Initialization (Dummy_Communication_Block);
+ 
++   --  for Florist
++   procedure Abort_Defer_NT
++      renames Nop; -- default of Lock_Abort_Hook
++   procedure Abort_Undefer_NT
++      renames Nop; -- default of Unlock_Abort_Hook
++   procedure Task_Lock_NT
++      renames Nop;
++   procedure Task_Unlock_NT
++      renames Nop;
++   Lock_Task : not null access procedure := Task_Lock_NT'Access
++      with Obsolescent;
++   Unlock_Task : not null access procedure := Task_Unlock_NT'Access
++      with Obsolescent;
++   function Get_Jmpbuf_Address_NT return Address is (Null_Address);
++   procedure Set_Jmpbuf_Address_NT (Addr : Address) is null;
++   Get_Jmpbuf_Address : not null access function return Address :=
++      Get_Jmpbuf_Address_NT'Access
++      with Obsolescent;
++   Set_Jmpbuf_Address : not null access procedure (Addr : Address) :=
++      Set_Jmpbuf_Address_NT'Access
++      with Obsolescent;
++   function Get_Sec_Stack_Addr_NT return Address
++      renames Get_Jmpbuf_Address_NT;
++   procedure Set_Sec_Stack_Addr_NT (Addr : Address)
++      renames Set_Jmpbuf_Address_NT;
++   Get_Sec_Stack_Addr : not null access function return Address :=
++      Get_Sec_Stack_Addr_NT'Access
++      with Obsolescent;
++   Set_Sec_Stack_Addr : not null access procedure (Addr : Address) :=
++      Set_Sec_Stack_Addr_NT'Access
++      with Obsolescent;
++
+ end System.Soft_Links;
+diff --git a/source/tasking/required/s-interr.adb b/source/tasking/required/s-interr.adb
+index 91c33bd2..af5d52fe 100644
+--- a/source/tasking/required/s-interr.adb
++++ b/source/tasking/required/s-interr.adb
+@@ -46,4 +46,44 @@ package body System.Interrupts is
+       end loop;
+    end Finalize;
+ 
++   function Is_Reserved (Interrupt : Interrupt_ID) return Boolean is
++   begin
++      return Ada.Interrupts.Is_Reserved (Interrupt);
++   end Is_Reserved;
++
++   function Is_Entry_Attached (Interrupt : Interrupt_ID) return Boolean is
++   begin
++      return Ada.Interrupts.Is_Attached (Interrupt);
++   end Is_Entry_Attached;
++
++   function Is_Handler_Attached (Interrupt : Interrupt_ID) return Boolean is
++   begin
++      return Ada.Interrupts.Is_Attached (Interrupt);
++   end Is_Handler_Attached;
++
++   function Is_Blocked (Interrupt : Interrupt_ID) return Boolean is
++   begin
++      return Ada.Interrupts.Is_Blocked (Interrupt);
++   end Is_Blocked;
++
++   procedure Block_Interrupt (Interrupt : Interrupt_ID) is
++   begin
++      Ada.Interrupts.Block (Interrupt);
++   end Block_Interrupt;
++
++   procedure Unblock_Interrupt (Interrupt : Interrupt_ID) is
++   begin
++      Ada.Interrupts.Unblock (Interrupt);
++   end Unblock_Interrupt;
++
++   procedure Ignore_Interrupt (Interrupt : Interrupt_ID) is
++   begin
++      raise Program_Error; -- unimplemented
++   end Ignore_Interrupt;
++
++   procedure Unignore_Interrupt (Interrupt : Interrupt_ID) is
++   begin
++      raise Program_Error; -- unimplemented
++   end Unignore_Interrupt;
++
+ end System.Interrupts;
+diff --git a/source/tasking/required/s-interr.ads b/source/tasking/required/s-interr.ads
+index eefabfd7..8aa9cfea 100644
+--- a/source/tasking/required/s-interr.ads
++++ b/source/tasking/required/s-interr.ads
+@@ -51,6 +51,35 @@ package System.Interrupts is
+       limited new Tasking.Protected_Objects.Entries.Protection_Entries with
+          null record;
+ 
++   --  for Florist
++   subtype Interrupt_ID is Ada.Interrupts.Interrupt_Id
++      with Obsolescent;
++   function Is_Reserved (Interrupt : Interrupt_ID) return Boolean
++      with Obsolescent, Convention => Intrinsic;
++   function Is_Entry_Attached (Interrupt : Interrupt_ID) return Boolean
++      with Obsolescent, Convention => Intrinsic;
++   function Is_Handler_Attached (Interrupt : Interrupt_ID) return Boolean
++      with Obsolescent, Convention => Intrinsic;
++   function Is_Blocked (Interrupt : Interrupt_ID) return Boolean
++      with Obsolescent, Convention => Intrinsic;
++   procedure Block_Interrupt (Interrupt : Interrupt_ID)
++      with Obsolescent, Convention => Intrinsic;
++   procedure Unblock_Interrupt (Interrupt : Interrupt_ID)
++      with Obsolescent, Convention => Intrinsic;
++   procedure Ignore_Interrupt (Interrupt : Interrupt_ID)
++      with Obsolescent, Convention => Intrinsic;
++   procedure Unignore_Interrupt (Interrupt : Interrupt_ID)
++      with Obsolescent, Convention => Intrinsic;
++
++   pragma Inline_Always (Is_Reserved);
++   pragma Inline_Always (Is_Entry_Attached);
++   pragma Inline_Always (Is_Handler_Attached);
++   pragma Inline_Always (Is_Blocked);
++   pragma Inline_Always (Block_Interrupt);
++   pragma Inline_Always (Unblock_Interrupt);
++   pragma Inline_Always (Ignore_Interrupt);
++   pragma Inline_Always (Unignore_Interrupt);
++
+    --  unimplemented subprograms required by compiler
+    --  Bind_Interrupt_To_Entry
+    --  Install_Restricted_Handlers
