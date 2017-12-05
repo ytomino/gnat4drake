@@ -1,9 +1,9 @@
 pragma License (Unrestricted);
-with C;
+with C.stdio;
 package Interfaces.C_Streams is
    pragma Preelaborate;
 
-   subtype FILEs is C.void_ptr; -- C.stdio.FILE_ptr;
+   subtype FILEs is C.stdio.FILE_ptr;
 
    function stdin return FILEs;
    function stdout return FILEs;
