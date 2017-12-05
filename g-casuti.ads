@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada.Characters.Handling;
 package GNAT.Case_Util is
    pragma Preelaborate; -- Ada.Characters.Handling is not pure.

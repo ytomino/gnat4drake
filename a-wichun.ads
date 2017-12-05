@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada.Wide_Characters.Handling;
 package Ada.Wide_Characters.Unicode is
    pragma Preelaborate; -- Ada.Wide_Characters.Handling is not Pure.

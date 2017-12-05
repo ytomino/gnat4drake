@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 package GNAT.Calendar.Time_IO is
 
    type Picture_String is new String;

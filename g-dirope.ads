@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada.Directories;
 with Ada.Hierarchical_File_Names;
 package GNAT.Directory_Operations is

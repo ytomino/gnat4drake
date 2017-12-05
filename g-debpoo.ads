@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with System.Storage_Elements;
 with System.Storage_Pools.Standard_Pools;
 package GNAT.Debug_Pools is

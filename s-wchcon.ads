@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 package System.WCh_Con is
    pragma Pure;
 

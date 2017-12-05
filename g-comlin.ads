@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 package GNAT.Command_Line is
 
    --  Parsing

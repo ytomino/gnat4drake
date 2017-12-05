@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada.Text_IO;
 package GNAT.IO is
    procedure Put (Item : String)

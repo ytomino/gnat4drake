@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 package GNAT.Heap_Sort is
    pragma Pure;
 

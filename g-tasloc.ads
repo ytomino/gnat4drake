@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 private with System.Shared_Locking; -- implementation unit
 package GNAT.Task_Lock is
    pragma Preelaborate;

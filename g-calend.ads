@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada.Calendar;
 package GNAT.Calendar is
 

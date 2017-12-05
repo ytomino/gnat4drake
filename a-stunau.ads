@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 package Ada.Strings.Unbounded.Aux is
    pragma Preelaborate;
 

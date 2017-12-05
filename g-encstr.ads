@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with System.WCh_Con;
 generic
    Encoding_Method : System.WCh_Con.WC_Encoding_Method;

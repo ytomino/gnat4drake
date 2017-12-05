@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with C;
 package Interfaces.C_Streams is
    pragma Preelaborate;

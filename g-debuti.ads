@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with System;
 package GNAT.Debug_Utilities is
    pragma Pure;

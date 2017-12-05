@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with System;
 package GNAT.Traceback is
    pragma Preelaborate;

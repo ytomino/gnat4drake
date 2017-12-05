@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with GNAT.Traceback;
 with System;
 package Ada.Exceptions.Traceback is

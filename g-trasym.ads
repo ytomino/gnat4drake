@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada.Exceptions;
 package GNAT.Traceback.Symbolic is
    pragma Preelaborate;

@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada.Streams.Stream_IO.Sockets;
 private with Ada.Strings.Unbounded_Strings;
 package GNAT.Sockets is

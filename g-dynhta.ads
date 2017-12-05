@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 private with Ada.Containers.Hashed_Maps;
 package GNAT.Dynamic_HTables is
 

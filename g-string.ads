@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada.Unchecked_Deallocation;
 package GNAT.Strings is
    pragma Preelaborate;

@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 generic
    type Table_Component_Type is private;
    type Table_Index_Type is range <>;

@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with GNAT.OS_Lib;
 with GNAT.Regpat;
 private with Ada.Processes;

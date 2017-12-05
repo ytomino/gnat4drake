@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada.Calendar;
 with Ada.Directories.Information;
 with Ada.Hierarchical_File_Names;

@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 package GNAT.Regpat is
    pragma Preelaborate;
 

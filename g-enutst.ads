@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with System.WCh_Con;
 with GNAT.Encode_String;
 package GNAT.Encode_UTF8_String is

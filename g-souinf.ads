@@ -1,3 +1,4 @@
+pragma License (Unrestricted);
 with Ada;
 package GNAT.Source_Info is
    pragma Pure;
