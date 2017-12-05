@@ -12,6 +12,7 @@ with C.stdlib;
 with C.string;
 package body GNAT.OS_Lib is
    use type Ada.Directories.File_Kind;
+   use type System.Native_IO.File_Mode;
 
    --  (adaint.c)
 
@@ -68,6 +69,13 @@ package body GNAT.OS_Lib is
 
    --  File Stuff
 
+   To_Native_Mode : constant
+         array (Ada.IO_Modes.File_Mode) of System.Native_IO.File_Mode := (
+      Ada.IO_Modes.In_File => System.Native_IO.Read_Only_Mode,
+      Ada.IO_Modes.Out_File => System.Native_IO.Write_Only_Mode,
+      Ada.IO_Modes.Append_File =>
+         System.Native_IO.Write_Only_Mode or System.Native_IO.Append_Mode);
+
    procedure Do_Open (
       Method : System.Native_IO.Open_Method;
       FD : out File_Descriptor;
@@ -90,7 +98,7 @@ package body GNAT.OS_Lib is
       System.Native_IO.Names.Open_Ordinary (
          Method => Method,
          Handle => Handle,
-         Mode => Mode,
+         Mode => To_Native_Mode (Mode),
          Name => Name,
          Out_Name => X_Name,
          Form => (
